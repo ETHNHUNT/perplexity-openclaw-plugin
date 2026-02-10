@@ -1,0 +1,27 @@
+# Source files
+src/
+tests/
+examples/
+
+# Configuration
+tsconfig.json
+vitest.config.ts
+biome.json
+.env.example
+
+# Development
+.github/
+.vscode/
+.idea/
+
+# Documentation (keep README.md)
+docs/
+CONTRIBUTING.md
+
+# Testing
+coverage/
+*.test.ts
+
+# Temporary
+tmp/
+*.log

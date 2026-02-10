@@ -1,0 +1,202 @@
+{
+  "name": "perplexity-openclaw-plugin",
+  "version": "1.0.0",
+  "description": "Perplexity AI integration for OpenClaw framework",
+  "tools": [
+    {
+      "name": "perplexity_search",
+      "description": "Perform web searches using Perplexity AI with various focus modes and search depths",
+      "enabled": true,
+      "parameters": {
+        "query": {
+          "type": "string",
+          "required": true,
+          "description": "The search query"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["concise", "detailed"],
+          "default": "concise",
+          "description": "Search mode: concise for quick answers, detailed for comprehensive results"
+        },
+        "focus": {
+          "type": "string",
+          "enum": ["internet", "academic", "writing", "wolfram", "youtube", "reddit"],
+          "default": "internet",
+          "description": "Search focus area"
+        },
+        "proSearch": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable Perplexity Pro search features"
+        }
+      },
+      "config": {
+        "timeout": 30000,
+        "retries": 3,
+        "cache": true,
+        "cacheTTL": 3600
+      }
+    },
+    {
+      "name": "perplexity_research",
+      "description": "Perform deep research on topics with multi-layered analysis",
+      "enabled": true,
+      "parameters": {
+        "topic": {
+          "type": "string",
+          "required": true,
+          "description": "The research topic"
+        },
+        "deep": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable deep research mode (requires Perplexity Pro)"
+        },
+        "maxDepth": {
+          "type": "number",
+          "default": 3,
+          "min": 1,
+          "max": 10,
+          "description": "Maximum research depth for exploration"
+        }
+      },
+      "config": {
+        "timeout": 60000,
+        "retries": 2,
+        "cache": true,
+        "cacheTTL": 7200
+      }
+    },
+    {
+      "name": "perplexity_chat",
+      "description": "Interactive chat with Perplexity AI, supporting conversations and multiple models",
+      "enabled": true,
+      "parameters": {
+        "message": {
+          "type": "string",
+          "required": true,
+          "description": "The chat message"
+        },
+        "conversationId": {
+          "type": "string",
+          "required": false,
+          "description": "Conversation ID to continue existing conversation"
+        },
+        "model": {
+          "type": "string",
+          "enum": ["default", "opus-4.5", "gpt-5.2", "gemini-3.0"],
+          "default": "default",
+          "description": "AI model to use (Pro models require Perplexity Pro)"
+        },
+        "modelCouncil": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use Model Council for multi-model synthesis (requires Perplexity Pro)"
+        }
+      },
+      "config": {
+        "timeout": 20000,
+        "retries": 3,
+        "cache": false,
+        "streamResponse": false
+      }
+    },
+    {
+      "name": "perplexity_extract_url",
+      "description": "Extract and analyze content from URLs",
+      "enabled": true,
+      "parameters": {
+        "url": {
+          "type": "string",
+          "required": true,
+          "format": "uri",
+          "description": "The URL to extract content from"
+        },
+        "depth": {
+          "type": "number",
+          "default": 1,
+          "min": 1,
+          "max": 5,
+          "description": "Extraction depth (how many linked pages to follow)"
+        },
+        "includeLinks": {
+          "type": "boolean",
+          "default": false,
+          "description": "Include links found in the content"
+        }
+      },
+      "config": {
+        "timeout": 15000,
+        "retries": 2,
+        "cache": true,
+        "cacheTTL": 1800
+      }
+    }
+  ],
+  "authentication": {
+    "method": "cookie",
+    "storagePath": "~/.perplexity/credentials.json",
+    "encryptionEnabled": true,
+    "sessionTimeout": 86400000
+  },
+  "server": {
+    "host": "localhost",
+    "port": 3000,
+    "endpoints": {
+      "health": "/health",
+      "plugin": "/plugin",
+      "tools": "/tools",
+      "invoke": "/tools/invoke"
+    },
+    "cors": {
+      "enabled": true,
+      "origins": ["*"]
+    },
+    "rateLimit": {
+      "enabled": true,
+      "windowMs": 60000,
+      "maxRequests": 100
+    }
+  },
+  "browser": {
+    "headless": true,
+    "timeout": 30000,
+    "navigationTimeout": 30000,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  "performance": {
+    "httpTimeout": 10000,
+    "maxRetries": 3,
+    "retryDelay": 1000,
+    "connectionPooling": true,
+    "caching": {
+      "enabled": true,
+      "defaultTTL": 3600,
+      "maxSize": 100
+    }
+  },
+  "logging": {
+    "level": "info",
+    "pretty": true,
+    "file": {
+      "enabled": false,
+      "path": "logs/perplexity.log",
+      "maxSize": "10m",
+      "maxFiles": 5
+    }
+  },
+  "features": {
+    "proFeatures": {
+      "enabled": false,
+      "deepResearch": true,
+      "modelCouncil": true,
+      "advancedModels": ["opus-4.5", "gpt-5.2", "gemini-3.0"]
+    },
+    "fallback": {
+      "enabled": true,
+      "browserAutomation": true,
+      "apiFirst": true
+    }
+  }
+}
