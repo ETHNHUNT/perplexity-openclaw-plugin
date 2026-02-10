@@ -1,0 +1,32 @@
+{
+  "name": "perplexity-openclaw-plugin",
+  "version": "0.1.0",
+  "description": "Perplexity model provider plugin for OpenClaw",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ETHNHUNT/perplexity-openclaw-plugin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ETHNHUNT/perplexity-openclaw-plugin/issues"
+  },
+  "homepage": "https://github.com/ETHNHUNT/perplexity-openclaw-plugin#readme",
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "files": [
+    "index.ts",
+    "openclaw.plugin.json",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "openclaw": ">=2026.2.9"
+  }
+}
