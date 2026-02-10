@@ -3,16 +3,16 @@
  * Main CLI entry point
  */
 
-import { Command } from 'commander';
 import chalk from 'chalk';
-import { loginCommand } from './commands/login.js';
-import { logoutCommand } from './commands/logout.js';
-import { statusCommand } from './commands/status.js';
-import { searchCommand } from './commands/search.js';
-import { researchCommand } from './commands/research.js';
+import { Command } from 'commander';
+import { logger } from '../utils/logger.js';
 import { chatCommand } from './commands/chat.js';
 import { extractUrlCommand } from './commands/extract-url.js';
-import { logger } from '../utils/logger.js';
+import { loginCommand } from './commands/login.js';
+import { logoutCommand } from './commands/logout.js';
+import { researchCommand } from './commands/research.js';
+import { searchCommand } from './commands/search.js';
+import { statusCommand } from './commands/status.js';
 
 const program = new Command();
 
@@ -31,10 +31,7 @@ program
   .action(loginCommand);
 
 // Logout command
-program
-  .command('logout')
-  .description('Logout and clear credentials')
-  .action(logoutCommand);
+program.command('logout').description('Logout and clear credentials').action(logoutCommand);
 
 // Status command
 program
@@ -96,7 +93,7 @@ program.exitOverride((err) => {
   if (err.code === 'commander.helpDisplayed') {
     process.exit(0);
   }
-  
+
   logger.error({ error: err }, 'CLI error');
   console.error(chalk.red(`Error: ${err.message}`));
   process.exit(1);

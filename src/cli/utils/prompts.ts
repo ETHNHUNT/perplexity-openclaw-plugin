@@ -2,8 +2,8 @@
  * Interactive CLI prompts
  */
 
-import inquirer from 'inquirer';
 import chalk from 'chalk';
+import inquirer from 'inquirer';
 
 /**
  * Prompts for email address
@@ -134,9 +134,5 @@ export async function promptLoginMethod(): Promise<'manual' | 'auto' | 'profile'
  * Prompts for output format selection
  */
 export async function promptOutputFormat(): Promise<'json' | 'table' | 'text'> {
-  return promptChoice(
-    'Select output format:',
-    ['json', 'table', 'text'],
-    'text',
-  );
+  return promptChoice('Select output format:', ['json', 'table', 'text'], 'text');
 }

@@ -3,12 +3,12 @@
  * Extract URL command - Extracts content from URLs
  */
 
-import type { ExtractUrlCommandOptions } from '../../types/cli.js';
 import { createSearchEngine } from '../../perplexity/search-engine.js';
-import { formatOutput, formatError, formatHeader } from '../utils/formatter.js';
-import { withSpinner } from '../utils/spinner.js';
+import type { ExtractUrlCommandOptions } from '../../types/cli.js';
 import { logger } from '../../utils/logger.js';
 import { validateOutputFormat, validateUrl } from '../../utils/validators.js';
+import { formatError, formatHeader, formatOutput } from '../utils/formatter.js';
+import { withSpinner } from '../utils/spinner.js';
 
 /**
  * Main extract-url command handler
@@ -27,11 +27,12 @@ export async function extractUrlCommand(
 
     const result = await withSpinner(
       'Extracting URL content...',
-      async () => searchEngine.extractUrl({
-        url,
-        depth: options.depth,
-        includeLinks: options.includeLinks,
-      }),
+      async () =>
+        searchEngine.extractUrl({
+          url,
+          depth: options.depth,
+          includeLinks: options.includeLinks,
+        }),
       'Extraction completed',
       'Extraction failed',
     );
@@ -46,23 +47,23 @@ export async function extractUrlCommand(
         console.log(formatHeader(result.title));
         console.log('');
       }
-      
+
       if (result.author) {
         console.log(`Author: ${result.author}`);
       }
-      
+
       if (result.publishDate) {
         console.log(`Published: ${result.publishDate}`);
       }
-      
+
       if (result.author || result.publishDate) {
         console.log('');
       }
-      
+
       console.log(formatHeader('Content'));
       console.log('');
       console.log(result.content);
-      
+
       if (result.links && result.links.length > 0) {
         console.log('');
         console.log(formatHeader('Links'));
@@ -70,7 +71,7 @@ export async function extractUrlCommand(
           console.log(`${i + 1}. ${link}`);
         });
       }
-      
+
       if (result.images && result.images.length > 0) {
         console.log('');
         console.log(formatHeader('Images'));
@@ -83,7 +84,11 @@ export async function extractUrlCommand(
     logger.info('Extract URL command completed successfully');
   } catch (error) {
     logger.error({ error }, 'Extract URL command failed');
-    console.log(formatError(`URL extraction failed: ${error instanceof Error ? error.message : String(error)}`));
+    console.log(
+      formatError(
+        `URL extraction failed: ${error instanceof Error ? error.message : String(error)}`,
+      ),
+    );
     process.exit(1);
   }
 }

@@ -29,7 +29,7 @@ export const SELECTORS = {
   EMAIL_INPUT: 'input[type="email"], input[name="email"]',
   PASSWORD_INPUT: 'input[type="password"], input[name="password"]',
   LOGIN_BUTTON: 'button[type="submit"]',
-  
+
   // Pro features
   DEEP_RESEARCH_BUTTON: '[data-feature="deep-research"]',
   MODEL_SELECTOR: '[data-testid="model-selector"]',

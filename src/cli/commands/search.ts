@@ -3,12 +3,12 @@
  * Search command - Performs web searches
  */
 
-import type { SearchCommandOptions } from '../../types/cli.js';
 import { createSearchEngine } from '../../perplexity/search-engine.js';
-import { formatOutput, formatError, formatHeader } from '../utils/formatter.js';
-import { withSpinner } from '../utils/spinner.js';
+import type { SearchCommandOptions } from '../../types/cli.js';
 import { logger } from '../../utils/logger.js';
 import { validateOutputFormat } from '../../utils/validators.js';
+import { formatError, formatHeader, formatOutput } from '../utils/formatter.js';
+import { withSpinner } from '../utils/spinner.js';
 
 /**
  * Main search command handler
@@ -23,12 +23,13 @@ export async function searchCommand(query: string, options: SearchCommandOptions
 
     const result = await withSpinner(
       'Searching...',
-      async () => searchEngine.search({
-        query,
-        mode: options.mode,
-        focus: options.focus as any,
-        proSearch: options.pro,
-      }),
+      async () =>
+        searchEngine.search({
+          query,
+          mode: options.mode,
+          focus: options.focus as any,
+          proSearch: options.pro,
+        }),
       'Search completed',
       'Search failed',
     );
@@ -41,13 +42,13 @@ export async function searchCommand(query: string, options: SearchCommandOptions
       console.log(formatHeader('Search Results'));
       console.log('');
       console.log(formatOutput({ Answer: result.answer }, 'text'));
-      
+
       if (result.sources.length > 0) {
         console.log('');
         console.log(formatHeader('Sources'));
         console.log(formatOutput(result.sources, 'table'));
       }
-      
+
       if (result.relatedQuestions.length > 0) {
         console.log('');
         console.log(formatHeader('Related Questions'));
@@ -60,7 +61,7 @@ export async function searchCommand(query: string, options: SearchCommandOptions
       console.log(formatHeader('Answer'));
       console.log('');
       console.log(result.answer);
-      
+
       if (result.sources.length > 0) {
         console.log('');
         console.log(formatHeader('Sources'));
@@ -69,7 +70,7 @@ export async function searchCommand(query: string, options: SearchCommandOptions
           console.log(`   ${source.url}`);
         });
       }
-      
+
       if (result.relatedQuestions.length > 0) {
         console.log('');
         console.log(formatHeader('Related Questions'));
@@ -82,7 +83,9 @@ export async function searchCommand(query: string, options: SearchCommandOptions
     logger.info('Search command completed successfully');
   } catch (error) {
     logger.error({ error }, 'Search command failed');
-    console.log(formatError(`Search failed: ${error instanceof Error ? error.message : String(error)}`));
+    console.log(
+      formatError(`Search failed: ${error instanceof Error ? error.message : String(error)}`),
+    );
     process.exit(1);
   }
 }

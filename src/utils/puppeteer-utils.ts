@@ -4,9 +4,9 @@
 
 import type { Browser, Page } from 'puppeteer';
 import puppeteer from 'puppeteer';
+import { config } from './config.js';
 import { BrowserError } from './error-handler.js';
 import { logger } from './logger.js';
-import { config } from './config.js';
 
 /**
  * Launches a browser instance
@@ -14,7 +14,7 @@ import { config } from './config.js';
 export async function launchBrowser(): Promise<Browser> {
   try {
     logger.debug({ headless: config.headlessBrowser }, 'Launching browser');
-    
+
     const browser = await puppeteer.launch({
       headless: config.headlessBrowser,
       args: [
@@ -42,10 +42,10 @@ export async function launchBrowser(): Promise<Browser> {
 export async function createPage(browser: Browser): Promise<Page> {
   try {
     const page = await browser.newPage();
-    
+
     // Set viewport
     await page.setViewport({ width: 1920, height: 1080 });
-    
+
     // Set user agent
     await page.setUserAgent(
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -67,7 +67,7 @@ export async function createPage(browser: Browser): Promise<Page> {
 export async function navigateToUrl(page: Page, url: string): Promise<void> {
   try {
     logger.debug({ url }, 'Navigating to URL');
-    
+
     await page.goto(url, {
       waitUntil: 'networkidle2',
       timeout: config.navigationTimeout,
@@ -96,21 +96,14 @@ export async function waitForSelector(
     });
     logger.debug({ selector }, 'Selector found');
   } catch (error) {
-    throw new BrowserError(
-      `Selector not found: ${selector}`,
-      error,
-    );
+    throw new BrowserError(`Selector not found: ${selector}`, error);
   }
 }
 
 /**
  * Types text into an input field
  */
-export async function typeIntoInput(
-  page: Page,
-  selector: string,
-  text: string,
-): Promise<void> {
+export async function typeIntoInput(page: Page, selector: string, text: string): Promise<void> {
   try {
     await waitForSelector(page, selector);
     await page.type(selector, text, { delay: 50 });

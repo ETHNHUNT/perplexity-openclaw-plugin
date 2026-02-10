@@ -2,24 +2,24 @@
  * Perplexity API client for direct HTTP calls
  */
 
+import { formatCookiesForHttp } from '../auth/cookie-manager.js';
+import { getCurrentSession } from '../auth/session-manager.js';
 import type {
-  SearchOptions,
-  SearchResult,
-  ResearchOptions,
-  ResearchResult,
   ChatOptions,
   ChatResult,
   ExtractUrlOptions,
   ExtractUrlResult,
+  ResearchOptions,
+  ResearchResult,
+  SearchOptions,
+  SearchResult,
   Source,
 } from '../types/perplexity.js';
-import { createHttpClient, type HttpClient } from '../utils/http-client.js';
-import { formatCookiesForHttp } from '../auth/cookie-manager.js';
-import { getCurrentSession } from '../auth/session-manager.js';
-import { logger } from '../utils/logger.js';
 import { AuthenticationError, NetworkError } from '../utils/error-handler.js';
+import { type HttpClient, createHttpClient } from '../utils/http-client.js';
+import { logger } from '../utils/logger.js';
 import { validateNotEmpty, validateUrl } from '../utils/validators.js';
-import { PERPLEXITY_URLS, API_ENDPOINTS } from './constants.js';
+import { API_ENDPOINTS, PERPLEXITY_URLS } from './constants.js';
 
 export class PerplexityApiClient {
   private client: HttpClient;

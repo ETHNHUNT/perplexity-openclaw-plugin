@@ -3,10 +3,16 @@
  * Status command - Shows authentication and session status
  */
 
-import type { StatusCommandOptions } from '../../types/cli.js';
 import { getSessionStatus } from '../../auth/session-manager.js';
-import { formatOutput, formatSuccess, formatWarning, formatInfo, formatHeader } from '../utils/formatter.js';
+import type { StatusCommandOptions } from '../../types/cli.js';
 import { logger } from '../../utils/logger.js';
+import {
+  formatHeader,
+  formatInfo,
+  formatOutput,
+  formatSuccess,
+  formatWarning,
+} from '../utils/formatter.js';
 
 /**
  * Formats time remaining in human-readable format
@@ -49,17 +55,17 @@ export async function statusCommand(options: StatusCommandOptions): Promise<void
     if (status.authenticated) {
       console.log(formatSuccess('Authenticated'));
       console.log('');
-      
+
       console.log(formatInfo('Session Information:'));
-      
+
       if (status.userId) {
         console.log(`  User: ${status.userId}`);
       }
-      
+
       if (status.expiresAt) {
         console.log(`  Expires: ${new Date(status.expiresAt).toLocaleString()}`);
       }
-      
+
       if (status.timeRemaining !== undefined) {
         console.log(`  Time Remaining: ${formatTimeRemaining(status.timeRemaining)}`);
       }

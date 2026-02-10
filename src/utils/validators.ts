@@ -18,7 +18,7 @@ export function validateNotEmpty(value: string, fieldName: string): void {
  */
 export function validateEmail(email: string): void {
   validateNotEmpty(email, 'Email');
-  
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     throw new ValidationError('Invalid email format');
@@ -30,7 +30,7 @@ export function validateEmail(email: string): void {
  */
 export function validateUrl(url: string): void {
   validateNotEmpty(url, 'URL');
-  
+
   try {
     new URL(url);
   } catch {
@@ -43,7 +43,7 @@ export function validateUrl(url: string): void {
  */
 export function validatePath(path: string, fieldName = 'Path'): void {
   validateNotEmpty(path, fieldName);
-  
+
   if (path.includes('..')) {
     throw new ValidationError(`${fieldName} cannot contain '..'`);
   }
@@ -76,9 +76,7 @@ export function validateEnum<T extends string>(
   fieldName: string,
 ): void {
   if (!allowedValues.includes(value as T)) {
-    throw new ValidationError(
-      `${fieldName} must be one of: ${allowedValues.join(', ')}`,
-    );
+    throw new ValidationError(`${fieldName} must be one of: ${allowedValues.join(', ')}`);
   }
 }
 

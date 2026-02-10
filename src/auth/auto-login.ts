@@ -4,12 +4,19 @@
 
 import type { Browser, Page } from 'puppeteer';
 import type { Cookie } from '../types/common.js';
-import type { LoginResult } from './types.js';
-import { launchBrowser, createPage, navigateToUrl, typeIntoInput, clickElement, closeBrowser } from '../utils/puppeteer-utils.js';
-import { logger } from '../utils/logger.js';
 import { config } from '../utils/config.js';
 import { AuthenticationError } from '../utils/error-handler.js';
+import { logger } from '../utils/logger.js';
+import {
+  clickElement,
+  closeBrowser,
+  createPage,
+  launchBrowser,
+  navigateToUrl,
+  typeIntoInput,
+} from '../utils/puppeteer-utils.js';
 import { validateEmail, validateNotEmpty } from '../utils/validators.js';
+import type { LoginResult } from './types.js';
 
 /**
  * Performs automated login to Perplexity
@@ -31,7 +38,7 @@ export async function performAutoLogin(email: string, password: string): Promise
 
     // Wait for login button and click it
     await page.waitForSelector('button, a', { timeout: 10000 });
-    
+
     // Look for sign-in or login button
     const loginButtonSelectors = [
       '[data-testid="login-button"]',
@@ -93,11 +100,7 @@ export async function performAutoLogin(email: string, password: string): Promise
     });
 
     // Check for errors
-    const errorSelectors = [
-      '[role="alert"]',
-      '.error',
-      '[data-testid="error-message"]',
-    ];
+    const errorSelectors = ['[role="alert"]', '.error', '[data-testid="error-message"]'];
 
     for (const selector of errorSelectors) {
       const errorElement = await page.$(selector);

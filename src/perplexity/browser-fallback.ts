@@ -3,27 +3,27 @@
  */
 
 import type { Browser } from 'puppeteer';
+import { getCurrentSession } from '../auth/session-manager.js';
 import type {
-  SearchOptions,
-  SearchResult,
   ChatOptions,
   ChatResult,
   ExtractUrlOptions,
   ExtractUrlResult,
+  SearchOptions,
+  SearchResult,
 } from '../types/perplexity.js';
+import { AuthenticationError, BrowserError } from '../utils/error-handler.js';
+import { logger } from '../utils/logger.js';
 import {
-  launchBrowser,
+  closeBrowser,
   createPage,
+  launchBrowser,
   navigateToUrl,
   typeIntoInput,
-  closeBrowser,
 } from '../utils/puppeteer-utils.js';
-import { getCurrentSession } from '../auth/session-manager.js';
-import { logger } from '../utils/logger.js';
-import { BrowserError, AuthenticationError } from '../utils/error-handler.js';
 import { extractSearchResult, waitForAnswerComplete } from './answer-extractor.js';
-import { findSelector } from './selector-detector.js';
 import { PERPLEXITY_URLS, TIMEOUTS } from './constants.js';
+import { findSelector } from './selector-detector.js';
 
 export class BrowserFallback {
   private browser: Browser | null = null;
@@ -44,16 +44,18 @@ export class BrowserFallback {
       const page = await createPage(this.browser);
 
       // Set cookies
-      await page.setCookie(...session.cookies.map(cookie => ({
-        name: cookie.name,
-        value: cookie.value,
-        domain: cookie.domain,
-        path: cookie.path,
-        expires: cookie.expires ? cookie.expires / 1000 : undefined,
-        httpOnly: cookie.httpOnly,
-        secure: cookie.secure,
-        sameSite: cookie.sameSite,
-      })));
+      await page.setCookie(
+        ...session.cookies.map((cookie) => ({
+          name: cookie.name,
+          value: cookie.value,
+          domain: cookie.domain,
+          path: cookie.path,
+          expires: cookie.expires ? cookie.expires / 1000 : undefined,
+          httpOnly: cookie.httpOnly,
+          secure: cookie.secure,
+          sameSite: cookie.sameSite,
+        })),
+      );
 
       // Navigate to Perplexity
       await navigateToUrl(page, PERPLEXITY_URLS.BASE);
@@ -108,22 +110,24 @@ export class BrowserFallback {
       const page = await createPage(this.browser);
 
       // Set cookies
-      await page.setCookie(...session.cookies.map(cookie => ({
-        name: cookie.name,
-        value: cookie.value,
-        domain: cookie.domain,
-        path: cookie.path,
-        expires: cookie.expires ? cookie.expires / 1000 : undefined,
-        httpOnly: cookie.httpOnly,
-        secure: cookie.secure,
-        sameSite: cookie.sameSite,
-      })));
+      await page.setCookie(
+        ...session.cookies.map((cookie) => ({
+          name: cookie.name,
+          value: cookie.value,
+          domain: cookie.domain,
+          path: cookie.path,
+          expires: cookie.expires ? cookie.expires / 1000 : undefined,
+          httpOnly: cookie.httpOnly,
+          secure: cookie.secure,
+          sameSite: cookie.sameSite,
+        })),
+      );
 
       // Navigate to conversation or base
       const url = options.conversationId
         ? `${PERPLEXITY_URLS.BASE}/conversation/${options.conversationId}`
         : PERPLEXITY_URLS.BASE;
-      
+
       await navigateToUrl(page, url);
 
       // Find chat input
@@ -181,16 +185,18 @@ export class BrowserFallback {
       const page = await createPage(this.browser);
 
       // Set cookies
-      await page.setCookie(...session.cookies.map(cookie => ({
-        name: cookie.name,
-        value: cookie.value,
-        domain: cookie.domain,
-        path: cookie.path,
-        expires: cookie.expires ? cookie.expires / 1000 : undefined,
-        httpOnly: cookie.httpOnly,
-        secure: cookie.secure,
-        sameSite: cookie.sameSite,
-      })));
+      await page.setCookie(
+        ...session.cookies.map((cookie) => ({
+          name: cookie.name,
+          value: cookie.value,
+          domain: cookie.domain,
+          path: cookie.path,
+          expires: cookie.expires ? cookie.expires / 1000 : undefined,
+          httpOnly: cookie.httpOnly,
+          secure: cookie.secure,
+          sameSite: cookie.sameSite,
+        })),
+      );
 
       // Navigate to Perplexity and submit URL
       await navigateToUrl(page, PERPLEXITY_URLS.BASE);

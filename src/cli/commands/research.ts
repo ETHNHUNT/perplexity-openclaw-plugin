@@ -3,12 +3,12 @@
  * Research command - Performs deep research
  */
 
-import type { ResearchCommandOptions } from '../../types/cli.js';
 import { createSearchEngine } from '../../perplexity/search-engine.js';
-import { formatOutput, formatError, formatHeader } from '../utils/formatter.js';
-import { withSpinner } from '../utils/spinner.js';
+import type { ResearchCommandOptions } from '../../types/cli.js';
 import { logger } from '../../utils/logger.js';
 import { validateOutputFormat } from '../../utils/validators.js';
+import { formatError, formatHeader, formatOutput } from '../utils/formatter.js';
+import { withSpinner } from '../utils/spinner.js';
 
 /**
  * Main research command handler
@@ -26,11 +26,12 @@ export async function researchCommand(
 
     const result = await withSpinner(
       options.deep ? 'Performing deep research...' : 'Researching...',
-      async () => searchEngine.research({
-        topic,
-        deep: options.deep,
-        maxDepth: options.maxDepth,
-      }),
+      async () =>
+        searchEngine.research({
+          topic,
+          deep: options.deep,
+          maxDepth: options.maxDepth,
+        }),
       'Research completed',
       'Research failed',
     );
@@ -43,13 +44,13 @@ export async function researchCommand(
       console.log(formatHeader('Research Summary'));
       console.log('');
       console.log(result.summary);
-      
+
       if (result.sections.length > 0) {
         console.log('');
         console.log(formatHeader('Sections'));
         console.log(formatOutput(result.sections, 'table'));
       }
-      
+
       if (result.sources.length > 0) {
         console.log('');
         console.log(formatHeader('Sources'));
@@ -60,7 +61,7 @@ export async function researchCommand(
       console.log(formatHeader('Summary'));
       console.log('');
       console.log(result.summary);
-      
+
       if (result.sections.length > 0) {
         console.log('');
         console.log(formatHeader('Details'));
@@ -70,7 +71,7 @@ export async function researchCommand(
           console.log(section.content);
         });
       }
-      
+
       if (result.sources.length > 0) {
         console.log('');
         console.log(formatHeader('Sources'));
@@ -79,7 +80,7 @@ export async function researchCommand(
           console.log(`   ${source.url}`);
         });
       }
-      
+
       if (result.relatedTopics.length > 0) {
         console.log('');
         console.log(formatHeader('Related Topics'));
@@ -92,7 +93,9 @@ export async function researchCommand(
     logger.info('Research command completed successfully');
   } catch (error) {
     logger.error({ error }, 'Research command failed');
-    console.log(formatError(`Research failed: ${error instanceof Error ? error.message : String(error)}`));
+    console.log(
+      formatError(`Research failed: ${error instanceof Error ? error.message : String(error)}`),
+    );
     process.exit(1);
   }
 }

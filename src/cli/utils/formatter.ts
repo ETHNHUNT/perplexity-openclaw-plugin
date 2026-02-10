@@ -98,9 +98,7 @@ function calculateColumnWidths(data: unknown[], columns: string[]): number[] {
  * Formats table header
  */
 function formatTableHeader(columns: string[], widths: number[]): string {
-  return columns
-    .map((column, index) => chalk.bold(column.padEnd(widths[index]!)))
-    .join(' | ');
+  return columns.map((column, index) => chalk.bold(column.padEnd(widths[index]!))).join(' | ');
 }
 
 /**
@@ -118,9 +116,10 @@ function formatTableRow(item: unknown, columns: string[], widths: number[]): str
     .map((column, index) => {
       const value = (item as Record<string, unknown>)[column];
       const stringValue = String(value ?? '');
-      const truncated = stringValue.length > widths[index]!
-        ? stringValue.substring(0, widths[index]! - 3) + '...'
-        : stringValue;
+      const truncated =
+        stringValue.length > widths[index]!
+          ? stringValue.substring(0, widths[index]! - 3) + '...'
+          : stringValue;
       return truncated.padEnd(widths[index]!);
     })
     .join(' | ');

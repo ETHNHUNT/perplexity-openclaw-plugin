@@ -3,15 +3,21 @@
  * Login command - Supports manual, auto, and profile login methods
  */
 
-import type { LoginCommandOptions } from '../../types/cli.js';
-import { loadCookiesFromFile, cookiesToCredentials } from '../../auth/cookie-manager.js';
 import { performAutoLogin } from '../../auth/auto-login.js';
-import { loadProfileFromPath, findCommonProfilePaths } from '../../auth/profile-manager.js';
+import { cookiesToCredentials, loadCookiesFromFile } from '../../auth/cookie-manager.js';
+import { findCommonProfilePaths, loadProfileFromPath } from '../../auth/profile-manager.js';
 import { createSession, saveSession } from '../../auth/session-manager.js';
-import { promptEmail, promptPassword, promptFilePath, promptLoginMethod, promptChoice } from '../utils/prompts.js';
-import { formatSuccess, formatError, formatInfo, formatWarning } from '../utils/formatter.js';
-import { withSpinner } from '../utils/spinner.js';
+import type { LoginCommandOptions } from '../../types/cli.js';
 import { logger } from '../../utils/logger.js';
+import { formatError, formatInfo, formatSuccess, formatWarning } from '../utils/formatter.js';
+import {
+  promptChoice,
+  promptEmail,
+  promptFilePath,
+  promptLoginMethod,
+  promptPassword,
+} from '../utils/prompts.js';
+import { withSpinner } from '../utils/spinner.js';
 
 /**
  * Handles manual cookie login
@@ -25,10 +31,7 @@ async function handleManualLogin(): Promise<void> {
   console.log(formatInfo('5. Export cookies as JSON'));
   console.log('');
 
-  const cookieFilePath = await promptFilePath(
-    'Enter path to cookie JSON file:',
-    './cookies.json',
-  );
+  const cookieFilePath = await promptFilePath('Enter path to cookie JSON file:', './cookies.json');
 
   const cookies = await withSpinner(
     'Loading cookies...',
@@ -55,15 +58,14 @@ async function handleAutoLogin(): Promise<void> {
   const email = await promptEmail();
   const password = await promptPassword();
 
-  const result = await withSpinner(
-    'Logging in...',
-    async () => performAutoLogin(email, password),
-  );
+  const result = await withSpinner('Logging in...', async () => performAutoLogin(email, password));
 
   if (result.success && result.session) {
     saveSession(result.session);
     console.log(formatSuccess('Login successful!'));
-    console.log(formatInfo(`Session expires: ${new Date(result.session.expiresAt).toLocaleString()}`));
+    console.log(
+      formatInfo(`Session expires: ${new Date(result.session.expiresAt).toLocaleString()}`),
+    );
   } else {
     console.log(formatError(`Login failed: ${result.error}`));
     process.exit(1);
@@ -82,16 +84,9 @@ async function handleProfileLogin(profilePath?: string): Promise<void> {
 
     if (commonPaths.length > 0) {
       console.log(formatInfo(`Found ${commonPaths.length} existing profile(s)`));
-      const choices = [
-        ...commonPaths,
-        'Other (specify path)',
-      ];
+      const choices = [...commonPaths, 'Other (specify path)'];
 
-      selectedPath = await promptChoice(
-        'Select a profile:',
-        choices,
-        commonPaths[0],
-      );
+      selectedPath = await promptChoice('Select a profile:', choices, commonPaths[0]);
 
       if (selectedPath === 'Other (specify path)') {
         selectedPath = await promptFilePath('Enter profile path:');
@@ -153,7 +148,9 @@ export async function loginCommand(options: LoginCommandOptions): Promise<void> 
     logger.info('Login command completed successfully');
   } catch (error) {
     logger.error({ error }, 'Login command failed');
-    console.log(formatError(`Login failed: ${error instanceof Error ? error.message : String(error)}`));
+    console.log(
+      formatError(`Login failed: ${error instanceof Error ? error.message : String(error)}`),
+    );
     process.exit(1);
   }
 }

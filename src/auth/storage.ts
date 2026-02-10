@@ -3,12 +3,12 @@
  */
 
 import { createCipheriv, createDecipheriv, randomBytes, scryptSync } from 'node:crypto';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-import type { AuthStorage } from './types.js';
 import { config } from '../utils/config.js';
-import { logger } from '../utils/logger.js';
 import { AuthenticationError } from '../utils/error-handler.js';
+import { logger } from '../utils/logger.js';
+import type { AuthStorage } from './types.js';
 
 const ALGORITHM = 'aes-256-gcm';
 const KEY_LENGTH = 32;
@@ -39,13 +39,9 @@ function encrypt(data: string, password: string): string {
   encrypted += cipher.final('hex');
 
   const authTag = cipher.getAuthTag();
-  
+
   // Combine IV + encrypted data + auth tag
-  return Buffer.concat([
-    iv,
-    Buffer.from(encrypted, 'hex'),
-    authTag,
-  ]).toString('base64');
+  return Buffer.concat([iv, Buffer.from(encrypted, 'hex'), authTag]).toString('base64');
 }
 
 /**
@@ -116,7 +112,7 @@ export function loadAuthStorage(password?: string): AuthStorage | null {
     }
 
     const encrypted = readFileSync(storagePath, 'utf8');
-    
+
     // Use environment variable or provided password
     const encryptionKey = password ?? process.env.AUTH_ENCRYPTION_KEY;
     const decrypted = encryptionKey ? decrypt(encrypted, encryptionKey) : encrypted;

@@ -2,12 +2,12 @@
  * Session lifecycle management
  */
 
-import type { Session, Cookie } from '../types/common.js';
-import type { AuthCredentials, AuthStorage } from './types.js';
-import { loadAuthStorage, saveAuthStorage, clearAuthStorage } from './storage.js';
-import { validatePerplexityCookies } from './cookie-manager.js';
-import { logger } from '../utils/logger.js';
+import type { Cookie, Session } from '../types/common.js';
 import { config } from '../utils/config.js';
+import { logger } from '../utils/logger.js';
+import { validatePerplexityCookies } from './cookie-manager.js';
+import { clearAuthStorage, loadAuthStorage, saveAuthStorage } from './storage.js';
+import type { AuthCredentials, AuthStorage } from './types.js';
 
 /**
  * Creates a new session from credentials

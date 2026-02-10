@@ -4,10 +4,10 @@
 
 import { readFileSync } from 'node:fs';
 import type { Cookie } from '../types/common.js';
-import type { AuthCredentials } from './types.js';
-import { logger } from '../utils/logger.js';
 import { AuthenticationError, ValidationError } from '../utils/error-handler.js';
+import { logger } from '../utils/logger.js';
 import { validatePath } from '../utils/validators.js';
+import type { AuthCredentials } from './types.js';
 
 /**
  * Loads cookies from a JSON file
@@ -29,7 +29,7 @@ export function loadCookiesFromFile(filePath: string): Cookie[] {
       if (!cookie.name || !cookie.value || !cookie.domain) {
         throw new ValidationError('Invalid cookie format: missing required fields');
       }
-      
+
       // Normalize expires to milliseconds if it appears to be in seconds
       if (cookie.expires && cookie.expires < 1e12) {
         cookie.expires = cookie.expires * 1000;
@@ -65,9 +65,7 @@ export function cookiesToCredentials(cookies: Cookie[]): AuthCredentials {
  * Formats cookies for HTTP requests
  */
 export function formatCookiesForHttp(cookies: Cookie[]): string {
-  return cookies
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
-    .join('; ');
+  return cookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; ');
 }
 
 /**
@@ -75,8 +73,8 @@ export function formatCookiesForHttp(cookies: Cookie[]): string {
  */
 export function filterCookiesByDomain(cookies: Cookie[], domain: string): Cookie[] {
   return cookies.filter(
-    (cookie) => 
-      cookie.domain === domain || 
+    (cookie) =>
+      cookie.domain === domain ||
       cookie.domain === `.${domain}` ||
       domain.endsWith(cookie.domain.replace(/^\./, '')),
   );
@@ -87,7 +85,7 @@ export function filterCookiesByDomain(cookies: Cookie[], domain: string): Cookie
  */
 export function areCookiesExpired(cookies: Cookie[]): boolean {
   const now = Date.now();
-  
+
   return cookies.some((cookie) => {
     if (!cookie.expires) return false;
     return cookie.expires < now;
@@ -99,7 +97,7 @@ export function areCookiesExpired(cookies: Cookie[]): boolean {
  */
 export function validatePerplexityCookies(cookies: Cookie[]): boolean {
   const perplexityCookies = filterCookiesByDomain(cookies, 'perplexity.ai');
-  
+
   if (perplexityCookies.length === 0) {
     logger.warn('No Perplexity cookies found');
     return false;

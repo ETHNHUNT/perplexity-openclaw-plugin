@@ -6,10 +6,10 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import type { Cookie } from '../types/common.js';
-import type { AuthCredentials } from './types.js';
-import { logger } from '../utils/logger.js';
 import { AuthenticationError } from '../utils/error-handler.js';
+import { logger } from '../utils/logger.js';
 import { validatePath } from '../utils/validators.js';
+import type { AuthCredentials } from './types.js';
 
 /**
  * Loads profile from an existing browser profile directory
@@ -50,16 +50,11 @@ async function extractCookiesFromProfile(profilePath: string): Promise<Cookie[]>
   const cookies: Cookie[] = [];
 
   // Common cookie file names in browser profiles
-  const cookieFiles = [
-    'Cookies',
-    'cookies.json',
-    '.cookies',
-    'cookies.sqlite',
-  ];
+  const cookieFiles = ['Cookies', 'cookies.json', '.cookies', 'cookies.sqlite'];
 
   for (const cookieFile of cookieFiles) {
     const cookiePath = join(profilePath, cookieFile);
-    
+
     if (existsSync(cookiePath)) {
       try {
         const extracted = await parseCookieFile(cookiePath);

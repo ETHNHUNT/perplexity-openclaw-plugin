@@ -88,11 +88,14 @@ export function toErrorResponse(error: unknown): ErrorResponse {
  */
 export function handleError(error: unknown, context?: string): never {
   const errorResponse = toErrorResponse(error);
-  
-  logger.error({
-    context,
-    error: errorResponse,
-  }, `Error: ${errorResponse.message}`);
+
+  logger.error(
+    {
+      context,
+      error: errorResponse,
+    },
+    `Error: ${errorResponse.message}`,
+  );
 
   throw error;
 }

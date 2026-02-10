@@ -34,12 +34,7 @@ const SELECTOR_VARIANTS: Record<string, SelectorVariant> = {
   },
   sourceLinks: {
     primary: SELECTORS.SOURCE_LINKS,
-    alternatives: [
-      'a[data-source]',
-      '.source-link',
-      '[data-testid="source"]',
-      'a[href*="source"]',
-    ],
+    alternatives: ['a[data-source]', '.source-link', '[data-testid="source"]', 'a[href*="source"]'],
   },
 };
 
@@ -91,7 +86,7 @@ export async function detectPageStructure(page: Page): Promise<{
 }> {
   const searchInput = await findSelector(page, 'searchInput', 2000);
   const answerContainer = await findSelector(page, 'answerContainer', 2000);
-  
+
   let hasProBadge = false;
   try {
     await page.waitForSelector(SELECTORS.PRO_BADGE, { timeout: 1000 });

@@ -4,9 +4,9 @@
  */
 
 import { clearSession } from '../../auth/session-manager.js';
-import { formatSuccess, formatInfo } from '../utils/formatter.js';
-import { promptConfirm } from '../utils/prompts.js';
 import { logger } from '../../utils/logger.js';
+import { formatInfo, formatSuccess } from '../utils/formatter.js';
+import { promptConfirm } from '../utils/prompts.js';
 
 /**
  * Main logout command handler

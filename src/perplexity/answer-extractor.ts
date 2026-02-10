@@ -5,8 +5,8 @@
 import type { Page } from 'puppeteer';
 import type { Source } from '../types/perplexity.js';
 import { logger } from '../utils/logger.js';
-import { extractTextWithFallback } from './selector-detector.js';
 import { SELECTORS } from './constants.js';
+import { extractTextWithFallback } from './selector-detector.js';
 
 /**
  * Extracts answer text from the page
@@ -22,7 +22,7 @@ export async function extractAnswer(page: Page): Promise<string> {
   ];
 
   const answer = await extractTextWithFallback(page, answerSelectors);
-  
+
   if (!answer) {
     logger.warn('Could not extract answer from page');
     return '';
@@ -78,15 +78,13 @@ export async function extractRelatedQuestions(page: Page): Promise<string[]> {
  */
 export async function extractImages(page: Page): Promise<Array<{ url: string; alt?: string }>> {
   try {
-    const images = await page.$$eval(
-      'img[src*="http"]',
-      (elements) =>
-        elements
-          .map((img) => ({
-            url: img.getAttribute('src') ?? '',
-            alt: img.getAttribute('alt') ?? undefined,
-          }))
-          .filter((img) => img.url && !img.url.includes('icon') && !img.url.includes('logo')),
+    const images = await page.$$eval('img[src*="http"]', (elements) =>
+      elements
+        .map((img) => ({
+          url: img.getAttribute('src') ?? '',
+          alt: img.getAttribute('alt') ?? undefined,
+        }))
+        .filter((img) => img.url && !img.url.includes('icon') && !img.url.includes('logo')),
     );
 
     logger.debug({ count: images.length }, 'Images extracted');

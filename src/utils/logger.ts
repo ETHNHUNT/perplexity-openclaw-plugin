@@ -2,11 +2,8 @@
  * Structured logging utility
  */
 
-import pinoModule from 'pino';
+import { pino } from 'pino';
 import { config } from './config.js';
-
-// Handle both ESM and CJS exports
-const pino = (pinoModule as any).default || pinoModule;
 
 /**
  * Create a logger instance

@@ -3,18 +3,18 @@
  */
 
 import type {
-  SearchOptions,
-  SearchResult,
-  ResearchOptions,
-  ResearchResult,
   ChatOptions,
   ChatResult,
   ExtractUrlOptions,
   ExtractUrlResult,
+  ResearchOptions,
+  ResearchResult,
+  SearchOptions,
+  SearchResult,
 } from '../types/perplexity.js';
+import { logger } from '../utils/logger.js';
 import { createPerplexityApiClient } from './api-client.js';
 import { createBrowserFallback } from './browser-fallback.js';
-import { logger } from '../utils/logger.js';
 
 export class SearchEngine {
   private apiClient = createPerplexityApiClient();

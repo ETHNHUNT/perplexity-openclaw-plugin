@@ -3,12 +3,12 @@
  * Chat command - Interactive chat/conversation
  */
 
-import type { ChatCommandOptions } from '../../types/cli.js';
 import { createSearchEngine } from '../../perplexity/search-engine.js';
-import { formatOutput, formatError, formatHeader } from '../utils/formatter.js';
-import { withSpinner } from '../utils/spinner.js';
+import type { ChatCommandOptions } from '../../types/cli.js';
 import { logger } from '../../utils/logger.js';
 import { validateOutputFormat } from '../../utils/validators.js';
+import { formatError, formatHeader, formatOutput } from '../utils/formatter.js';
+import { withSpinner } from '../utils/spinner.js';
 
 /**
  * Main chat command handler
@@ -23,12 +23,13 @@ export async function chatCommand(message: string, options: ChatCommandOptions):
 
     const result = await withSpinner(
       'Sending message...',
-      async () => searchEngine.chat({
-        message,
-        conversationId: options.conversationId,
-        model: options.model as any,
-        modelCouncil: options.modelCouncil,
-      }),
+      async () =>
+        searchEngine.chat({
+          message,
+          conversationId: options.conversationId,
+          model: options.model as any,
+          modelCouncil: options.modelCouncil,
+        }),
       'Message sent',
       'Chat failed',
     );
@@ -42,12 +43,12 @@ export async function chatCommand(message: string, options: ChatCommandOptions):
       console.log(formatHeader('Response'));
       console.log('');
       console.log(result.response);
-      
+
       if (result.conversationId) {
         console.log('');
         console.log(`Conversation ID: ${result.conversationId}`);
       }
-      
+
       if (result.sources && result.sources.length > 0) {
         console.log('');
         console.log(formatHeader('Sources'));
@@ -61,7 +62,9 @@ export async function chatCommand(message: string, options: ChatCommandOptions):
     logger.info('Chat command completed successfully');
   } catch (error) {
     logger.error({ error }, 'Chat command failed');
-    console.log(formatError(`Chat failed: ${error instanceof Error ? error.message : String(error)}`));
+    console.log(
+      formatError(`Chat failed: ${error instanceof Error ? error.message : String(error)}`),
+    );
     process.exit(1);
   }
 }

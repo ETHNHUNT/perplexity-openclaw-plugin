@@ -9,11 +9,11 @@ import { initializePlugin, invokeTool, startHttpServer } from 'perplexity-opencl
  */
 async function initializePluginExample() {
   console.log('=== Example 1: Initialize Plugin ===');
-  
+
   const config = initializePlugin();
   console.log(`Plugin Name: ${config.name}`);
   console.log(`Version: ${config.version}`);
-  console.log(`Available Tools: ${config.tools.map(t => t.name).join(', ')}`);
+  console.log(`Available Tools: ${config.tools.map((t) => t.name).join(', ')}`);
   console.log();
 }
 
@@ -22,17 +22,17 @@ async function initializePluginExample() {
  */
 async function searchExample() {
   console.log('=== Example 2: Search Operation ===');
-  
+
   try {
     const result = await invokeTool({
       tool: 'perplexity_search',
       parameters: {
         query: 'What is TypeScript?',
         mode: 'detailed',
-        focus: 'internet'
-      }
+        focus: 'internet',
+      },
     });
-    
+
     if (result.success) {
       console.log('Search Result:', result.data);
       console.log(`Execution Time: ${result.metadata.executionTime}ms`);
@@ -50,17 +50,17 @@ async function searchExample() {
  */
 async function researchExample() {
   console.log('=== Example 3: Research Operation ===');
-  
+
   try {
     const result = await invokeTool({
       tool: 'perplexity_research',
       parameters: {
         topic: 'Sustainable energy solutions',
         deep: false,
-        maxDepth: 3
-      }
+        maxDepth: 3,
+      },
     });
-    
+
     if (result.success) {
       console.log('Research Result:', result.data);
     } else {
@@ -77,16 +77,16 @@ async function researchExample() {
  */
 async function chatExample() {
   console.log('=== Example 4: Chat Operation ===');
-  
+
   try {
     const result = await invokeTool({
       tool: 'perplexity_chat',
       parameters: {
         message: 'Explain quantum computing in simple terms',
-        model: 'default'
-      }
+        model: 'default',
+      },
     });
-    
+
     if (result.success) {
       console.log('Chat Response:', result.data);
     } else {
@@ -103,17 +103,17 @@ async function chatExample() {
  */
 async function extractUrlExample() {
   console.log('=== Example 5: URL Extraction ===');
-  
+
   try {
     const result = await invokeTool({
       tool: 'perplexity_extract_url',
       parameters: {
         url: 'https://example.com',
         depth: 1,
-        includeLinks: true
-      }
+        includeLinks: true,
+      },
     });
-    
+
     if (result.success) {
       console.log('Extracted Content:', result.data);
     } else {
@@ -130,7 +130,7 @@ async function extractUrlExample() {
  */
 async function httpServerExample() {
   console.log('=== Example 6: HTTP Server Mode ===');
-  
+
   try {
     const server = await startHttpServer(3000, 'localhost');
     console.log('OpenClaw plugin server running on http://localhost:3000');
@@ -139,7 +139,7 @@ async function httpServerExample() {
     console.log('  GET  /plugin - Plugin information');
     console.log('  GET  /tools - List available tools');
     console.log('  POST /tools/invoke - Invoke a tool');
-    
+
     // Example API call (using fetch or axios)
     console.log('\nExample API call:');
     console.log(`
@@ -152,7 +152,7 @@ async function httpServerExample() {
       })
     })
     `);
-    
+
     // Keep server running for demo
     // server.close() to stop
   } catch (error) {
@@ -166,15 +166,15 @@ async function httpServerExample() {
  */
 async function errorHandlingExample() {
   console.log('=== Example 7: Error Handling ===');
-  
+
   try {
     const result = await invokeTool({
       tool: 'perplexity_search',
       parameters: {
-        query: '' // Invalid: empty query
-      }
+        query: '', // Invalid: empty query
+      },
     });
-    
+
     if (!result.success) {
       console.log('Expected error:', result.error);
       console.log('Error metadata:', result.metadata);
@@ -190,23 +190,23 @@ async function errorHandlingExample() {
  */
 async function batchOperationsExample() {
   console.log('=== Example 8: Batch Operations ===');
-  
+
   const queries = [
     'What is machine learning?',
     'What is TypeScript?',
-    'What is quantum computing?'
+    'What is quantum computing?',
   ];
-  
+
   try {
     const results = await Promise.all(
-      queries.map(query =>
+      queries.map((query) =>
         invokeTool({
           tool: 'perplexity_search',
-          parameters: { query, mode: 'concise' }
-        })
-      )
+          parameters: { query, mode: 'concise' },
+        }),
+      ),
     );
-    
+
     results.forEach((result, index) => {
       if (result.success) {
         console.log(`Query ${index + 1}: ${queries[index]}`);
@@ -227,23 +227,23 @@ async function main() {
   console.log('Perplexity OpenClaw Plugin - Integration Examples\n');
   console.log('='.repeat(50));
   console.log();
-  
+
   // Run examples sequentially
   await initializePluginExample();
-  
+
   // Note: The following examples require authentication
   // Run: perplexity-cli login before executing
-  
+
   // await searchExample();
   // await researchExample();
   // await chatExample();
   // await extractUrlExample();
   // await errorHandlingExample();
   // await batchOperationsExample();
-  
+
   // Uncomment to start HTTP server
   // await httpServerExample();
-  
+
   console.log('='.repeat(50));
   console.log('\nExamples completed!');
   console.log('\nNote: Authentication required for most operations.');
@@ -263,5 +263,5 @@ export {
   extractUrlExample,
   httpServerExample,
   errorHandlingExample,
-  batchOperationsExample
+  batchOperationsExample,
 };

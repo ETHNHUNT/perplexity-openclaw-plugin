@@ -2,9 +2,9 @@
  * Configuration management
  */
 
-import { config as dotenvConfig } from 'dotenv';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
+import { config as dotenvConfig } from 'dotenv';
 import type { Config } from '../types/common.js';
 
 // Load environment variables
@@ -51,7 +51,7 @@ export const config: Config = {
   navigationTimeout: getEnvNumber('NAVIGATION_TIMEOUT', 30000),
 
   // Logging
-  logLevel: (getEnvString('LOG_LEVEL', 'info') as Config['logLevel']),
+  logLevel: getEnvString('LOG_LEVEL', 'info') as Config['logLevel'],
   logPretty: getEnvBoolean('LOG_PRETTY', true),
 
   // OpenClaw Plugin
