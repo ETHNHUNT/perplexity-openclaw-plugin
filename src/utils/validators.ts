@@ -39,7 +39,7 @@ export function validateUrl(url: string): void {
 }
 
 /**
- * Validates a file path exists
+ * Validates a file path (checks for empty and parent directory traversal)
  */
 export function validatePath(path: string, fieldName = 'Path'): void {
   validateNotEmpty(path, fieldName);

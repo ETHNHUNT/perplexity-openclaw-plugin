@@ -2,7 +2,7 @@
  * CLI-specific types
  */
 
-import type { OutputFormat } from './common.js';
+export type OutputFormat = 'json' | 'table' | 'text';
 
 export interface LoginCommandOptions {
   manual?: boolean;

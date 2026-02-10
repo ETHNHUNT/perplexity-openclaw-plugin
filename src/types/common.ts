@@ -23,7 +23,7 @@ export interface Cookie {
   value: string;
   domain: string;
   path: string;
-  expires?: number;
+  expires?: number; // Unix timestamp in milliseconds
   httpOnly?: boolean;
   secure?: boolean;
   sameSite?: 'Strict' | 'Lax' | 'None';
@@ -55,9 +55,7 @@ export interface ErrorResponse {
   details?: unknown;
 }
 
-export type OutputFormat = 'json' | 'table' | 'text';
-
 export interface BaseCommandOptions {
-  output?: OutputFormat;
+  output?: string;
   verbose?: boolean;
 }

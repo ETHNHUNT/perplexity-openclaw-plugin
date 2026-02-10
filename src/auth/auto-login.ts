@@ -34,12 +34,10 @@ export async function performAutoLogin(email: string, password: string): Promise
     
     // Look for sign-in or login button
     const loginButtonSelectors = [
-      'button:has-text("Sign in")',
-      'button:has-text("Log in")',
-      'a:has-text("Sign in")',
-      'a:has-text("Log in")',
       '[data-testid="login-button"]',
       '[aria-label="Sign in"]',
+      '[aria-label="Log in"]',
+      'button[type="button"]',
     ];
 
     let loginClicked = false;
@@ -176,7 +174,7 @@ export async function detectCaptchaOr2FA(page: Page): Promise<boolean> {
     'input[name="code"]',
     'input[name="otp"]',
     '[data-testid="2fa-input"]',
-    'text="Enter the code"',
+    'input[autocomplete="one-time-code"]',
   ];
 
   for (const selector of [...captchaSelectors, ...twoFASelectors]) {

@@ -3,7 +3,6 @@
  */
 
 import ora, { type Ora } from 'ora';
-import chalk from 'chalk';
 
 /**
  * Creates and manages a loading spinner

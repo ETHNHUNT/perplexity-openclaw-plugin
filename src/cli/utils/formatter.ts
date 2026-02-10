@@ -3,7 +3,7 @@
  */
 
 import chalk from 'chalk';
-import type { OutputFormat, TableColumn } from '../../types/cli.js';
+import type { OutputFormat } from '../../types/cli.js';
 
 /**
  * Formats output based on the specified format

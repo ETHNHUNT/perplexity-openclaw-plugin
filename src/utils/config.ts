@@ -77,11 +77,11 @@ export function validateConfig(cfg: Config): string[] {
     errors.push('PERPLEXITY_BASE_URL is required');
   }
 
-  if (cfg.sessionTimeout < 0) {
+  if (cfg.sessionTimeout <= 0) {
     errors.push('SESSION_TIMEOUT must be positive');
   }
 
-  if (cfg.browserTimeout < 0) {
+  if (cfg.browserTimeout <= 0) {
     errors.push('BROWSER_TIMEOUT must be positive');
   }
 

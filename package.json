@@ -2,6 +2,7 @@
   "name": "perplexity-openclaw-plugin",
   "version": "1.0.0",
   "description": "Standalone CLI tool and OpenClaw plugin for Perplexity AI integration with browser automation",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {

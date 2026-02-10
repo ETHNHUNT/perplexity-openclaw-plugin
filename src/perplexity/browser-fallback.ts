@@ -2,7 +2,7 @@
  * Browser fallback for when API calls fail
  */
 
-import type { Browser, Page } from 'puppeteer';
+import type { Browser } from 'puppeteer';
 import type {
   SearchOptions,
   SearchResult,
@@ -16,16 +16,14 @@ import {
   createPage,
   navigateToUrl,
   typeIntoInput,
-  clickElement,
   closeBrowser,
 } from '../utils/puppeteer-utils.js';
-import { formatCookiesForHttp } from '../auth/cookie-manager.js';
 import { getCurrentSession } from '../auth/session-manager.js';
 import { logger } from '../utils/logger.js';
 import { BrowserError, AuthenticationError } from '../utils/error-handler.js';
 import { extractSearchResult, waitForAnswerComplete } from './answer-extractor.js';
 import { findSelector } from './selector-detector.js';
-import { PERPLEXITY_URLS, SELECTORS, TIMEOUTS } from './constants.js';
+import { PERPLEXITY_URLS, TIMEOUTS } from './constants.js';
 
 export class BrowserFallback {
   private browser: Browser | null = null;

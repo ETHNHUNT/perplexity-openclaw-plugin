@@ -3,7 +3,7 @@
  */
 
 import { createCipheriv, createDecipheriv, randomBytes, scryptSync } from 'node:crypto';
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync } from 'node:fs';
 import { dirname } from 'node:path';
 import type { AuthStorage } from './types.js';
 import { config } from '../utils/config.js';
@@ -75,7 +75,7 @@ function decrypt(encryptedData: string, password: string): string {
 /**
  * Saves authentication storage to disk
  */
-export function saveAuthStorage(storage: AuthStorage, password = 'default'): void {
+export function saveAuthStorage(storage: AuthStorage, password?: string): void {
   try {
     const storagePath = config.authStoragePath;
     const dir = dirname(storagePath);
@@ -86,7 +86,12 @@ export function saveAuthStorage(storage: AuthStorage, password = 'default'): voi
     }
 
     const data = JSON.stringify(storage);
-    const encrypted = encrypt(data, password);
+    // Use environment variable or provided password, or disable encryption
+    const encryptionKey = password ?? process.env.AUTH_ENCRYPTION_KEY;
+    if (!encryptionKey && config.encryptionEnabled) {
+      logger.warn('No encryption key provided and encryption is enabled. Storing unencrypted.');
+    }
+    const encrypted = encryptionKey ? encrypt(data, encryptionKey) : data;
 
     writeFileSync(storagePath, encrypted, 'utf8');
     logger.debug({ path: storagePath }, 'Auth storage saved');
@@ -101,7 +106,7 @@ export function saveAuthStorage(storage: AuthStorage, password = 'default'): voi
 /**
  * Loads authentication storage from disk
  */
-export function loadAuthStorage(password = 'default'): AuthStorage | null {
+export function loadAuthStorage(password?: string): AuthStorage | null {
   try {
     const storagePath = config.authStoragePath;
 
@@ -111,7 +116,10 @@ export function loadAuthStorage(password = 'default'): AuthStorage | null {
     }
 
     const encrypted = readFileSync(storagePath, 'utf8');
-    const decrypted = decrypt(encrypted, password);
+    
+    // Use environment variable or provided password
+    const encryptionKey = password ?? process.env.AUTH_ENCRYPTION_KEY;
+    const decrypted = encryptionKey ? decrypt(encrypted, encryptionKey) : encrypted;
     const storage = JSON.parse(decrypted) as AuthStorage;
 
     logger.debug({ path: storagePath }, 'Auth storage loaded');
@@ -130,7 +138,7 @@ export function clearAuthStorage(): void {
     const storagePath = config.authStoragePath;
 
     if (existsSync(storagePath)) {
-      writeFileSync(storagePath, '', 'utf8');
+      unlinkSync(storagePath);
       logger.info('Auth storage cleared');
     }
   } catch (error) {

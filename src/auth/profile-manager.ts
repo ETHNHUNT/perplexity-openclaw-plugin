@@ -2,7 +2,8 @@
  * Profile manager for reusing existing browser profiles
  */
 
-import { copyFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, statSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join } from 'node:path';
 import type { Cookie } from '../types/common.js';
 import type { AuthCredentials } from './types.js';
@@ -125,7 +126,6 @@ export function validateProfileDirectory(profilePath: string): boolean {
  * Finds common profile locations
  */
 export function findCommonProfilePaths(): string[] {
-  const { homedir } = require('node:os');
   const home = homedir();
 
   return [

@@ -8,7 +8,7 @@ import { loadCookiesFromFile, cookiesToCredentials } from '../../auth/cookie-man
 import { performAutoLogin } from '../../auth/auto-login.js';
 import { loadProfileFromPath, findCommonProfilePaths } from '../../auth/profile-manager.js';
 import { createSession, saveSession } from '../../auth/session-manager.js';
-import { promptEmail, promptPassword, promptFilePath, promptLoginMethod, promptChoice, promptConfirm } from '../utils/prompts.js';
+import { promptEmail, promptPassword, promptFilePath, promptLoginMethod, promptChoice } from '../utils/prompts.js';
 import { formatSuccess, formatError, formatInfo, formatWarning } from '../utils/formatter.js';
 import { withSpinner } from '../utils/spinner.js';
 import { logger } from '../../utils/logger.js';

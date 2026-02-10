@@ -113,7 +113,7 @@ export async function extractConversationId(page: Page): Promise<string | undefi
 
     // Try to get from page data
     const conversationId = await page.evaluate(() => {
-      const metaTag = document.querySelector('meta[name="conversation-id"]');
+      const metaTag = (globalThis as any).document?.querySelector('meta[name="conversation-id"]');
       return metaTag?.getAttribute('content') ?? undefined;
     });
 

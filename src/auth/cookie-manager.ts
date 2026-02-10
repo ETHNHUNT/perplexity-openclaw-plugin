@@ -24,10 +24,15 @@ export function loadCookiesFromFile(filePath: string): Cookie[] {
       throw new ValidationError('Cookie file must contain an array of cookies');
     }
 
-    // Validate cookie structure
+    // Validate and normalize cookie structure
     for (const cookie of cookies) {
       if (!cookie.name || !cookie.value || !cookie.domain) {
         throw new ValidationError('Invalid cookie format: missing required fields');
+      }
+      
+      // Normalize expires to milliseconds if it appears to be in seconds
+      if (cookie.expires && cookie.expires < 1e12) {
+        cookie.expires = cookie.expires * 1000;
       }
     }
 
